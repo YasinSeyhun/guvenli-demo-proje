@@ -1,0 +1,23 @@
+name: SBOM Upload to Dependency-Track
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm install -g @cyclonedx/cdxgen
+      - run: cdxgen -o bom.xml
+      - name: Upload to Dependency-Track
+        run: |
+          curl -X "POST" "${{ secrets.DT_SERVER_URL }}/api/v1/bom" \
+               -H "X-Api-Key: ${{ secrets.DT_API_KEY }}" \
+               -H "Content-Type: multipart/form-data" \
+               -F "projectName=Guvenli-Demo-Proje" \
+               -F "autoCreate=true" \
+               -F "bom=@bom.xml"
