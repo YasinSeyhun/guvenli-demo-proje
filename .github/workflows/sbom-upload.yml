@@ -14,4 +14,9 @@ jobs:
       - run: npm install -g @cyclonedx/cdxgen
       - run: cdxgen -o bom.xml
       - name: Upload to Dependency-Track
-        run: curl -X "POST" -H "X-Api-Key: ${{ secrets.DT_API_KEY }}" -H "Content-Type: multipart/form-data" -F "project=71b387b1-919f-4ff6-b438-0b5562cf6f58" -F "bom=@bom.xml" "${{ secrets.DT_SERVER_URL }}/api/v1/bom"
+        run: |
+          curl -X "POST" "${{ secrets.DT_SERVER_URL }}/api/v1/bom" \
+               -H "X-Api-Key: ${{ secrets.DT_API_KEY }}" \
+               -H "Content-Type: multipart/form-data" \
+               -F "project=71b387b1-919f-4ff6-b438-0b5562cf6f58" \
+               -F "bom=@bom.xml"
