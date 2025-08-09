@@ -12,6 +12,6 @@
   "dependencies": {
     "axios": "^0.30.0",
     "express": "^5.1.0",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   }
 }
